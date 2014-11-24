@@ -1,0 +1,58 @@
+---
+layout: post
+category: "java"
+title:  "shutdown hook in java programming language"
+tags: [java,hook]
+---
+今天加入了JavaCoding 创建的“高级java讨论群”   JavaCoding发了这样一条 ”大部分Java程序员在做独立程序的时候, 不做Shutdown Hook. 导致一些程序再关闭后, 出现数据处理不正确的情况, 我遇见很多次了.“ （点击这里）
+发现原来加shutdown hook是这么的重要
+虚拟机（VM）关闭时，它会调用线程的start()方法
+如果在你的程序关闭时，需要做一些清除工作、释放资源等等，那么这时shutdown hook会非常有用
+
+自己写了段代码：
+{% highlight java %}
+package com.taobao.edp.shutdownhook;
+
+public class ShutdownHook {
+
+	/**
+	 * 
+	 * @param args
+	 * @throws InterruptedException
+	 */
+	public static void main(String[] args) throws InterruptedException {
+		Hook hook = new Hook();
+		System.out.println("Running Main Application...");
+		Runtime.getRuntime().addShutdownHook(hook);
+		for(int i=0; i<10; i++)
+		{
+			Thread.sleep(1000);
+			System.out.println("i=" + i);
+		}
+		System.out.println("Exiting.");
+	}
+
+	private static class Hook extends Thread {
+		public void run() {
+			System.out.println("Running Clean Up...");
+		}
+	}
+}
+{% endhighlight %}
+
+运行结果：
+{% highlight java %}
+Running Main Application...
+i=0
+i=1
+i=2
+i=3
+i=4
+i=5
+i=6
+i=7
+i=8
+i=9
+Exiting.
+Running Clean Up...
+{% endhighlight %}
