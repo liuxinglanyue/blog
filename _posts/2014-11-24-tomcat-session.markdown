@@ -53,7 +53,6 @@ protected String generateSessionId() {
         }
         result = sessionIdGenerator.generateSessionId();
     } while (sessions.containsKey(result));
-    
     return result;
 }
 </pre>
