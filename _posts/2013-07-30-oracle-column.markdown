@@ -40,4 +40,4 @@ commit;
 alter table T_CHARACTER_CONTENT drop column HEIGHT_temp;
 alter table T_CHARACTER_CONTENT modify HEIGHT not null;
 select * from T_CHARACTER_CONTENT;
-<pre>
+</pre>
