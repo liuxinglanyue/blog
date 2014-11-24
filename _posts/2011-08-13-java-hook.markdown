@@ -12,9 +12,7 @@ tags: [java,hook]
 自己写了段代码：
 <pre class="prettyPrint">
 package com.taobao.edp.shutdownhook;
-
 public class ShutdownHook {
-
 	/**
 	 * 
 	 * @param args
