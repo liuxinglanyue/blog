@@ -38,7 +38,7 @@ public class ShutdownHook {
 </pre>
 
 运行结果：
-{% highlight java %}
+<pre class="prettyPrint">
 Running Main Application...
 i=0
 i=1
@@ -52,4 +52,4 @@ i=8
 i=9
 Exiting.
 Running Clean Up...
-{% endhighlight %}
+</pre>
