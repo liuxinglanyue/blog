@@ -11,7 +11,6 @@ tags: [tomcat,session]
 <pre class="prettyPrint">
 @Override
 public Session createSession(String sessionId) {
-    
     if ((maxActiveSessions >= 0) &&
             (getActiveSessions() >= maxActiveSessions)) {
         rejectedSessions++;
@@ -22,7 +21,7 @@ public Session createSession(String sessionId) {
     
     // Recycle or create a Session instance
     Session session = createEmptySession();
-
+    
     // Initialize the properties of the new session and return it
     session.setNew(true);
     session.setValid(true);
@@ -34,14 +33,14 @@ public Session createSession(String sessionId) {
     }
     session.setId(id);
     sessionCounter++;
-
+    
     SessionTiming timing = new SessionTiming(session.getCreationTime(), 0);
     synchronized (sessionCreationTiming) {
         sessionCreationTiming.add(timing);
         sessionCreationTiming.poll();
     }
     return (session);
-
+    
 }
 </pre>
 generateSessionId方法
