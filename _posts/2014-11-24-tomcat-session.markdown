@@ -6,8 +6,8 @@ tags: [tomcat,session]
 ---
 本文是基于apache-tomcat-7.0.54。
 
-    阅读了创建session的源码，发现有极小的可能性，session会被覆盖（不安全）。
-    下面从ManagerBase的createSession方法开始
+  阅读了创建session的源码，发现有极小的可能性，session会被覆盖（不安全）。
+  下面从ManagerBase的createSession方法开始
 <pre class="prettyPrint">
 @Override
 public Session createSession(String sessionId) {
@@ -47,9 +47,7 @@ public Session createSession(String sessionId) {
 generateSessionId方法
 <pre class="prettyPrint">
 protected String generateSessionId() {
-
     String result = null;
-
     do {
         if (result != null) {
             // Not thread-safe but if one of multiple increments is lost
@@ -57,9 +55,7 @@ protected String generateSessionId() {
             // duplicate is a much bigger issue.
             duplicates++;
         }
-
         result = sessionIdGenerator.generateSessionId();
-        
     } while (sessions.containsKey(result));
     
     return result;
