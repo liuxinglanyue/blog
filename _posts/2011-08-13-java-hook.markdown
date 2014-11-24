@@ -10,7 +10,7 @@ tags: [java,hook]
 如果在你的程序关闭时，需要做一些清除工作、释放资源等等，那么这时shutdown hook会非常有用
 
 自己写了段代码：
-{% highlight java %}
+<pre class="prettyPrint">
 package com.taobao.edp.shutdownhook;
 
 public class ShutdownHook {
@@ -38,7 +38,7 @@ public class ShutdownHook {
 		}
 	}
 }
-{% endhighlight %}
+</pre>
 
 运行结果：
 {% highlight java %}
