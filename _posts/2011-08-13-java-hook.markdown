@@ -29,7 +29,6 @@ public class ShutdownHook {
 		}
 		System.out.println("Exiting.");
 	}
-
 	private static class Hook extends Thread {
 		public void run() {
 			System.out.println("Running Clean Up...");
