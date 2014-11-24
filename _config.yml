@@ -1,0 +1,25 @@
+markdown: redcarpet
+permalink: /:categories/:title.html
+url: 
+lsi: false
+pygments: true
+safe: true
+auto: false 
+
+paginate: 8
+paginate_path: "page:num"
+
+# presonal config
+title: Liuxinglanyue's Blog
+description: Liuxinglanyue's Blog, powered by Jekyll...
+feed: http://www.liuxinglanyue.cn/atom.xml
+
+author: liuxinglanyue
+
+seo: 
+  keyword: 
+  description: 
+config:
+  js_dir:
+  img_dir:
+  css_dir:
