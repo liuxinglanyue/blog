@@ -18,10 +18,8 @@ public Session createSession(String sessionId) {
                 sm.getString("managerBase.createSession.ise"),
                 maxActiveSessions);
     }
-
     // Recycle or create a Session instance
     Session session = createEmptySession();
-
     // Initialize the properties of the new session and return it
     session.setNew(true);
     session.setValid(true);
@@ -33,7 +31,6 @@ public Session createSession(String sessionId) {
     }
     session.setId(id);
     sessionCounter++;
-
     SessionTiming timing = new SessionTiming(session.getCreationTime(), 0);
     synchronized (sessionCreationTiming) {
         sessionCreationTiming.add(timing);
@@ -56,7 +53,7 @@ protected String generateSessionId() {
         }
         result = sessionIdGenerator.generateSessionId();
     } while (sessions.containsKey(result));
-
+    
     return result;
 }
 </pre>
