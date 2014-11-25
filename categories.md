@@ -8,7 +8,7 @@ title: "分类：Categories"
    <a name="{{ cat[0] }}"></a>
    <h2>{{ cat[0] }}({{ cat[1].size }})</h2> 
      {% for post in cat[1] %} 
-    <li><h4><span>{{ post.date | date_to_string }}</span> &raquo; <a href="/blog{{ post.url }}">{{ post.title }}</a></h4></li>
+    <li><h4><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></h4></li>
 	{% endfor %} 
    {% endif %} 
 {% endfor %} 
