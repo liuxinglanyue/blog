@@ -1,7 +1,7 @@
 markdown: redcarpet
 permalink: /:categories/:title.html
 url: 
-baseurl: /blog
+baseurl: /
 lsi: false
 pygments: true
 safe: true
