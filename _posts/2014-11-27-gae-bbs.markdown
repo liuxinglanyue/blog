@@ -1,0 +1,12 @@
+---
+layout: post
+category: "water"
+title:  "折腾的GAE-BBS"
+tags: [gae,bbs]
+---
+
+#记录下坑
+
+将GAE上的应用从Master/Slave升级到High Replication
+
+已经无以言表了，等待明天的结果【Stats not available】
