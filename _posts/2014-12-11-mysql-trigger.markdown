@@ -10,7 +10,6 @@ tags: [mysql,sql,trigger]
 申明：
 MySQL版本 mysql  Ver 14.14 Distrib 5.1.73, for redhat-linux-gnu (x86_64) using readline 5.1
 sql中的record_time只到分钟。
--------------------------------------------------------------------------------
 
 首先贴一下sql
 <pre class="prettyPrint">
