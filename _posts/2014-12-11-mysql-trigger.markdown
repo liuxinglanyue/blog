@@ -9,7 +9,7 @@ MySQL版本 mysql  Ver 14.14 Distrib 5.1.73, for redhat-linux-gnu (x86_64) using
 sql中的record_time只到分钟。
 
 首先贴一下sql
-<pre>
+<pre class="prettyPrint">
 DROP TRIGGER IF EXISTS trig_expresslane_service_flow;
 DELIMITER //
 CREATE TRIGGER trig_expresslane_service_flow
@@ -45,7 +45,7 @@ DELIMITER //
 主要说一下对时间的处理
 
 对5分钟的处理如下：
-<pre>
+<pre class="prettyPrint">
 set @five_len=(MINUTE(NEW.record_time) % 5) * -1;
 set @five_date=date_add(NEW.record_time, interval @five_len minute);
 </pre>
