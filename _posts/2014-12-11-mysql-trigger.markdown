@@ -5,7 +5,7 @@ title:  "MySQL的触发器(将数据按照5分钟进行归并)"
 tags: [mysql,sql,trigger]
 ---
 
-下划线需要通过\转义
+markdown中下划线需要通过\转义
 -------------------------------------------------------------------------------
 申明：
 MySQL版本 mysql  Ver 14.14 Distrib 5.1.73, for redhat-linux-gnu (x86\_64) using readline 5.1
