@@ -4,6 +4,9 @@ category: "sql"
 title:  "MySQL的触发器(将数据按照5分钟进行归并)"
 tags: [mysql,sql,trigger]
 ---
+
+变量中的下划线全部被编辑器过滤掉了。
+
 申明：
 MySQL版本 mysql  Ver 14.14 Distrib 5.1.73, for redhat-linux-gnu (x86_64) using readline 5.1
 sql中的record_time只到分钟。
