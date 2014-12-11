@@ -5,41 +5,41 @@ title:  "MySQL的触发器(将数据按照5分钟进行归并)"
 tags: [mysql,sql,trigger]
 ---
 
-变量中的下划线全部被编辑器过滤掉了。
+下划线需要通过\转义
 -------------------------------------------------------------------------------
 申明：
-MySQL版本 mysql  Ver 14.14 Distrib 5.1.73, for redhat-linux-gnu (x86_64) using readline 5.1
-sql中的record_time只到分钟。
+MySQL版本 mysql  Ver 14.14 Distrib 5.1.73, for redhat-linux-gnu (x86\_64) using readline 5.1
+sql中的record\_time只到分钟。
 
 首先贴一下sql
 <pre class="prettyPrint">
-DROP TRIGGER IF EXISTS trig_expresslane_service_flow;
+DROP TRIGGER IF EXISTS trig\_expresslane\_service\_flow;
 DELIMITER //
-CREATE TRIGGER trig_expresslane_service_flow
-AFTER INSERT on expresslane_service_flow
+CREATE TRIGGER trig\_expresslane\_service\_flow
+AFTER INSERT on expresslane\_service\_flow
 FOR EACH ROW
 BEGIN
-	declare five_len int;
-	declare five_date datetime;
-	declare five_unique varchar(255);
-	declare five_id bigint(19);
-	declare five_access_rate bigint(20);
-	declare five_service_flow_rate bigint(20);
-	declare five_total_back_flow_rate bigint(20);
-	declare five_back_flow_rate bigint(20);
-	set @five_len=(MINUTE(NEW.record_time) % 5) * -1;
-	set @five_date=date_add(NEW.record_time, interval @five_len minute);
-	set @five_unique=CONCAT_WS(',',@five_date, NEW.service_type, NEW.device_idn, NEW.app_id, NEW.domain);
-	select id, access_rate, service_flow_rate, total_back_flow_rate, back_flow_rate into @five_id, @five_access_rate, @five_service_flow_rate, @five_total_back_flow_rate, @five_back_flow_rate from expresslane_service_flow_5 where unique_field = @five_unique;
-	if @five_id > 0 then
-		set @five_service_flow_rate = @five_service_flow_rate + NEW.service_flow_rate;
-		set @five_total_back_flow_rate = @five_total_back_flow_rate + NEW.total_back_flow_rate;
-		set @five_back_flow_rate = @five_back_flow_rate + NEW.back_flow_rate;
-		set @five_access_rate = @five_access_rate + NEW.access_rate;
-		update expresslane_service_flow_5 t set t.access_rate=@five_access_rate, t.service_flow_rate=@five_service_flow_rate, t.total_back_flow_rate=@five_total_back_flow_rate, t.back_flow_rate=@five_back_flow_rate where t.id = @five_id;
+	declare five\_len int;
+	declare five\_date datetime;
+	declare five\_unique varchar(255);
+	declare five\_id bigint(19);
+	declare five\_access\_rate bigint(20);
+	declare five\_service\_flow\_rate bigint(20);
+	declare five\_total\_back\_flow\_rate bigint(20);
+	declare five\_back\_flow\_rate bigint(20);
+	set @five\_len=(MINUTE(NEW.record\_time) % 5) * -1;
+	set @five\_date=date\_add(NEW.record\_time, interval @five\_len minute);
+	set @five\_unique=CONCAT\_WS(',',@five\_date, NEW.service\_type, NEW.device\_idn, NEW.app\_id, NEW.domain);
+	select id, access\_rate, service\_flow\_rate, total\_back\_flow\_rate, back\_flow\_rate into @five\_id, @five\_access\_rate, @five\_service\_flow\_rate, @five\_total\_back\_flow\_rate, @five\_back\_flow\_rate from expresslane\_service\_flow\_5 where unique\_field = @five\_unique;
+	if @five\_id > 0 then
+		set @five\_service\_flow\_rate = @five\_service\_flow\_rate + NEW.service\_flow\_rate;
+		set @five\_total\_back\_flow\_rate = @five\_total\_back\_flow\_rate + NEW.total\_back\_flow\_rate;
+		set @five\_back\_flow\_rate = @five\_back\_flow\_rate + NEW.back\_flow\_rate;
+		set @five\_access\_rate = @five\_access\_rate + NEW.access\_rate;
+		update expresslane\_service\_flow\_5 t set t.access\_rate=@five\_access\_rate, t.service\_flow\_rate=@five\_service\_flow\_rate, t.total\_back\_flow\_rate=@five\_total\_back\_flow\_rate, t.back\_flow\_rate=@five\_back\_flow\_rate where t.id = @five\_id;
 	else
-		insert into expresslane_service_flow_5 (record_time,service_type,device_idn,domain,app_id,access_rate,service_flow_rate,total_back_flow_rate,back_flow_rate,unique_field)
-			values(@five_date,NEW.service_type,NEW.device_idn,NEW.domain,NEW.app_id,NEW.access_rate,NEW.service_flow_rate,NEW.total_back_flow_rate,NEW.back_flow_rate,@five_unique);
+		insert into expresslane\_service\_flow\_5 (record\_time,service\_type,device\_idn,domain,app\_id,access\_rate,service\_flow\_rate,total\_back\_flow\_rate,back\_flow\_rate,unique\_field)
+			values(@five\_date,NEW.service\_type,NEW.device\_idn,NEW.domain,NEW.app\_id,NEW.access\_rate,NEW.service\_flow\_rate,NEW.total\_back\_flow\_rate,NEW.back\_flow\_rate,@five\_unique);
 	end if;
 END//
 DELIMITER //
@@ -49,13 +49,13 @@ DELIMITER //
 
 对5分钟的处理如下：
 <pre class="prettyPrint">
-set @five_len=(MINUTE(NEW.record_time) % 5) * -1;
-set @five_date=date_add(NEW.record_time, interval @five_len minute);
+set @five\_len=(MINUTE(NEW.record\_time) % 5) * -1;
+set @five\_date=date\_add(NEW.record\_time, interval @five\_len minute);
 </pre>
-先获取通过mysql函数MINUTE获取record_time的分钟值，然后对5求余数，同时 * -1
-通过date_add函数将record_time和five_len相加。
+先获取通过mysql函数MINUTE获取record\_time的分钟值，然后对5求余数，同时 * -1
+通过date\_add函数将record\_time和five\_len相加。
 
-举例：record_time=2014-05-06 17:48:00 
+举例：record\_time=2014-05-06 17:48:00 
 (48 % 5) * -1 = -3
-date_add(record_time, interval -3 minute) = 2014-05-06 17:45:00 
+date\_add(record\_time, interval -3 minute) = 2014-05-06 17:45:00 
 
