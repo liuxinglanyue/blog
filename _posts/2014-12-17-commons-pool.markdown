@@ -27,6 +27,7 @@ Checking connectivity... done.
 </pre>
 
 接下来用cloc统计了下代码量
+
 ![hello](/img/commons-pool.png) 
 
 java代码12733行， 而单单统计main中的java代码只有4854行（测试代码7811行，囧囧o(╯□╰)o），这个代码量是可以接受的。
