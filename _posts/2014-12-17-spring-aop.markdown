@@ -32,6 +32,7 @@ org.springframework.aop.framework.DefaultAopProxyFactory
 cglib的好处就是代理的类不需要是interface。翻翻资料可知，cglib代理的方式是创建子类。
 
 有兴趣可以再了解下getProxy的过程，这里贴下代码
+
 org.springframework.aop.framework.CglibAopProxy
 
 <pre class="prettyPrint">
