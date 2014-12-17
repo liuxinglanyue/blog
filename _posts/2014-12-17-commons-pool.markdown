@@ -27,11 +27,12 @@ Checking connectivity... done.
 </pre>
 
 接下来用cloc统计了下代码量
-<pre class="prettyPrint">
+
 cloc commons-pool
      120 text files.
      117 unique files.
       16 files ignored.
+
 http://cloc.sourceforge.net v 1.62  T=0.68 s (154.2 files/s, 38443.1 lines/s)
 ----------------------------------------------------------------------------------------
 Language                              files          blank        comment           code
@@ -46,5 +47,5 @@ Bourne Shell                              4              9            122       
 ----------------------------------------------------------------------------------------
 SUM:                                    105           2554           8582          15041
 ----------------------------------------------------------------------------------------
-</pre>
+
 java代码12733行， 而单单统计main中的java代码只有4854行（测试代码7811行，囧囧o(╯□╰)o），这个代码量是可以接受的。
