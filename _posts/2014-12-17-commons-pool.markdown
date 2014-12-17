@@ -6,8 +6,11 @@ tags: [commons,pool,cloc,redis]
 ---
 
 今天在公司阿里云主机上搭建了redis集群，采用的是twitter开源的twemproxy(nutcracker)。
+
 这玩意真是折腾，得先安装autoconf、libtool。对autoconf的版本还有要求。
+
 onfigure.ac:8: error: Autoconf version 2.64 or higher is required
+
 而云主机上yum install autoconf安装的版本达不到要求，so，download http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz
 然后yum install libtool
 
