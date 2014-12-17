@@ -32,7 +32,6 @@ cloc commons-pool
      120 text files.
      117 unique files.
       16 files ignored.
-
 http://cloc.sourceforge.net v 1.62  T=0.68 s (154.2 files/s, 38443.1 lines/s)
 ----------------------------------------------------------------------------------------
 Language                              files          blank        comment           code
