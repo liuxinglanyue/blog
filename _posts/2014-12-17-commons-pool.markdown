@@ -13,6 +13,8 @@ onfigure.ac:8: error: Autoconf version 2.64 or higher is required
 
 twemproxy处理单点故障有点坑，server_retry_timeout设置小了，kill掉一台redis，报错 ERR Connection refused
 
+![hello](/img/commons-pool-2.jpg) 
+
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-上面扯淡了\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
 
 一开始git clone是被17104惊讶了
