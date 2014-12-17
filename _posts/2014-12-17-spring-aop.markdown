@@ -28,7 +28,9 @@ org.springframework.aop.framework.DefaultAopProxyFactory
 	}
 </pre>
 这段代码的意思很明确，除非targetClass是接口，否则使用jdk自带的代理类。
+
 不优先使用cglib是有原因的，cglib创建proxy比较慢。
+
 cglib的好处就是代理的类不需要是interface。翻翻资料可知，cglib代理的方式是创建子类。
 
 有兴趣可以再了解下getProxy的过程，这里贴下代码
