@@ -6,6 +6,9 @@ tags: [lock,ReentrantLock,Interrupted]
 ---
 
 看一些开源项目，发现使用lockInterruptibly的情况还挺多的，故研究下。
+首先从下面一段代码开始
+
+方法1，第二次lock是会一直等待，对interrupt不感冒。
 
 <pre class="prettyPrint">
 package com.lock;
