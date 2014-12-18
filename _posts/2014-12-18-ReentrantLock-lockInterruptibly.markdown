@@ -10,6 +10,11 @@ tags: [lock,ReentrantLock,Interrupted]
 
 方法1，第二次lock是会一直等待，对interrupt不感冒。
 
+方法2，lockInterruptibly会先判断线程是否中断，如果中断直接throw InterruptedException（方法3就是这种情况）
+没有中断的情况下，执行tryAcquire，这里肯定false，因为一开始已经lock了，没有unlock。
+通过调试知道，线程阻塞在LockSupport.park(this);中的unsafe.park(false, 0L);
+接下来如果执行thread.interrupt();会执行native方法interrupt0();
+
 <pre class="prettyPrint">
 package com.lock;
 //
