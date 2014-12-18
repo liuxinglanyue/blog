@@ -5,6 +5,7 @@ title: "关于ReentrantLock中lockInterruptibly的分析"
 tags: [lock,ReentrantLock,Interrupted]
 ---
 
+看一些开源项目，发现使用lockInterruptibly的情况还挺多的，故研究下。
 
 <pre class="prettyPrint">
 package com.lock;
