@@ -16,7 +16,9 @@ tags: [lock,ReentrantLock,Interrupted]
 
 通过调试知道，线程阻塞在LockSupport.park(this);中的unsafe.park(false, 0L);
 
-接下来如果执行thread.interrupt();会执行native方法interrupt0();
+接下来如果执行thread.interrupt();会执行native方法interrupt0();  so.........
+
+方法4，和方法2只有最后一行不同lock.unlock();这会调用LockSupport.unpark(s.thread); so.........
 
 <pre class="prettyPrint">
 package com.lock;
