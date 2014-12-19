@@ -14,17 +14,17 @@ tags: [thread,threadSafe,guardedBy,jsr305]
      * Invariant: (first == null && last == null) ||
      *            (first.prev == null && first.item != null)
      */
-    private transient Node<E> first; // At GuardedBy("lock")
+    private transient Node<E> first; // GuardedBy("lock")
 //
     /**
      * Pointer to last node.
      * Invariant: (first == null && last == null) ||
      *            (last.next == null && last.item != null)
      */
-    private transient Node<E> last; // At GuardedBy("lock")
+    private transient Node<E> last; // GuardedBy("lock")
 //
     /** Number of items in the deque */
-    private transient int count; // At GuardedBy("lock")
+    private transient int count; // GuardedBy("lock")
 </pre>
 
 jsr305-2.0.1.jar 中除了GuardedBy还有ThreadSafe、NotThreadSafe、Nonnull、CheckForNull。。。。。
