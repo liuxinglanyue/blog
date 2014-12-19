@@ -7,7 +7,7 @@ tags: [thread,threadSafe,guardedBy,jsr305]
 
 这件事儿得从commons-pool说起，在看pool源码的过程中看到LinkedBlockingDeque。http://javagoo.tk/java/commons-pool.html
 
-其中有三个成员变量被标注为@GuardedBy("lock")， 好奇找了下，看是哪个jar中的。
+其中有三个成员变量被标注为\@GuardedBy("lock")， 好奇找了下，看是哪个jar中的。
 <pre class="prettyPrint">
   /**
      * Pointer to first node.
@@ -26,8 +26,4 @@ tags: [thread,threadSafe,guardedBy,jsr305]
     /** Number of items in the deque */
     private transient int count; // @GuardedBy("lock")
 </pre>
-jsr305-2.0.1.jar 中除了@GuardedBy还有@ThreadSafe、@NotThreadSafe、@Nonnull、@CheckForNull。。。。。
-看过《Java并发编程实战》对@ThreadSafe、@NotThreadSafe肯定不陌生，书中一堆堆，还有那个可爱的图标，哈哈。
-
-这本书中附录A对@GuardedBy有不错的讲解。摘录如下
 
