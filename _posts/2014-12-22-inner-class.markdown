@@ -49,3 +49,6 @@ Student类的构造方法多了School paramSchool这个参数，然后JD-GUI反�
 
 Student类中多了这样一个属性final com.innerClasses.School this0; 其他就不需要我多说什么了吧，都懂了。
 
+还有一个疑问就是private类型的属性是如何访问的呢？
+
+答案就是通过在School类中生成static的access方法来获取所需的值。
