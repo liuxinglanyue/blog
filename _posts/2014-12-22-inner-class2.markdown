@@ -46,4 +46,3 @@ InnerClass$1构造方法不需要多介绍了吧，可以看上一篇博客。
 这里有篇不错的文章，推荐下。
 Efficiency of Java “Double Brace Initialization”?
 http://stackoverflow.com/questions/924285/efficiency-of-java-double-brace-initialization
-
