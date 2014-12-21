@@ -52,3 +52,7 @@ Student类中多了这样一个属性final com.innerClasses.School this0; 其他
 还有一个疑问就是private类型的属性是如何访问的呢？
 
 答案就是通过在School类中生成static的access方法来获取所需的值。
+
+这里还需要补充一点来自《深入理解Java虚拟机》中的知识，如图；
+
+![hello](/img/inner-classes.png) 
