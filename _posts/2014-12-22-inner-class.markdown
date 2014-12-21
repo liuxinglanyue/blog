@@ -40,7 +40,9 @@ class School {
 
 问题来了，Student类是如何访问School中id的呢。
 InnerClass.java编译后生成三个文件，Student类反编译后如图所示：
+
 ![hello](/img/inner-student.png) 
+
 Student类的构造方法多了School paramSchool这个参数，然后JD-GUI反编译出来的又没有将其赋值给任何变量。
 我猜测是作者过滤掉了，so 我们通过javap -verbose 看下。
 
