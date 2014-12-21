@@ -5,6 +5,28 @@ title:  "对Java内部类的一点点深入分析（补充）"
 tags: [inner,InnerClasses]
 ---
 
-Java内部类，我们平时用的不算多，但是像JDK源码等等类库用的还是挺多的，故这里简单分析下它的实现原理。
+这篇是对上一篇文章的补充，有种初始化是匿名类初始化，我们这里就来比较下。
 
-首先我们带着下面的疑问来看问题：
+<pre class="prettyPrint">
+import java.util.ArrayList;
+import java.util.List;
+//
+public class InnerClass {
+	//
+	public void initList() {
+		List<String> l = new ArrayList<String>();
+		l.add("Hello");
+		l.add("World!");
+	}
+	//
+	public void initInnerList() {
+		List<String> l = new ArrayList<String>() {
+			{
+				add("Hello");
+				add("World!");
+			}
+		};
+	}
+}
+</pre>
+
