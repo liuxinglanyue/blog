@@ -40,3 +40,9 @@ initInnerList方法中初始化代码没有了，另外多了个class。
 真没有了吗？实际上调用了匿名类的构造方法来初始化，呵呵。
 
 InnerClass$1构造方法不需要多介绍了吧，可以看上一篇博客。
+
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
+这里有篇不错的文章，推荐下。
+Efficiency of Java “Double Brace Initialization”?
+http://stackoverflow.com/questions/924285/efficiency-of-java-double-brace-initialization
