@@ -1,7 +1,7 @@
 ---
 layout: post
 category: "java"
-title:  "对Java内部类的一点点深入分析（补充）"
+title:  "对内部类的一点点深入分析（补充）"
 tags: [inner,InnerClasses]
 ---
 
@@ -36,4 +36,7 @@ initInnerList方法中l的初始化是在{}中，接下来我们直接看反编�
 
 ![hello](/img/inner-list-2.png)
 
+initInnerList方法中初始化代码没有了，另外多了个class。
+真没有了吗？实际上调用了匿名类的构造方法来初始化，呵呵。
 
+InnerClass(At)1构造方法不需要多介绍了吧，可以看上一篇博客。
