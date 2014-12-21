@@ -1,7 +1,7 @@
 ---
 layout: post
 category: "java"
-title:  "对Java内部类的一点点深入分析(上)"
+title:  "对Java内部类的一点点深入分析"
 tags: [java,inner,InnerClasses]
 ---
 
