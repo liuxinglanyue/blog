@@ -30,3 +30,9 @@ public class InnerClass {
 }
 </pre>
 
+initInnerList方法中l的初始化是在{}中，接下来我们直接看反编译后的代码
+
+![hello](/img/inner-list.png)
+
+![hello](/img/inner-list-2.png)
+
