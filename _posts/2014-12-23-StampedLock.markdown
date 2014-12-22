@@ -101,3 +101,52 @@ public boolean validate(long stamp) {
         return (stamp & SBITS) == (state & SBITS);
 }
 </pre>
+
+这里有篇文章，在官方文档的基础上加入自己的理解，特分享下。
+http://lianming.info/java8/2014/02/10/stamped-lock/
+
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
+到这里了还没有结束，JaonHui有篇文章《Bug:StampedLock的中断问题导致CPU爆满》
+http://ifeve.com/stampedlock-bug-cpu/
+
+<pre class="prettyPrint">
+import java.util.concurrent.locks.LockSupport;
+import java.util.concurrent.locks.StampedLock;
+//
+public class TestStampedLock {
+	public static void main(String[] args) throws InterruptedException {
+		final StampedLock lock = new StampedLock();
+		new Thread() {
+			public void run() {
+				long readLong = lock.writeLock();
+				LockSupport.parkNanos(6100000000L);
+				lock.unlockWrite(readLong);
+			}
+		}.start();
+		Thread.sleep(100);
+		for (int i = 0; i < 3; ++i)
+			new Thread(new OccupiedCPUReadThread(lock)).start();
+		System.out.println("end");
+	}
+//
+	private static class OccupiedCPUReadThread implements Runnable {
+		private StampedLock lock;
+//
+		public OccupiedCPUReadThread(StampedLock lock) {
+			this.lock = lock;
+		}
+//
+		public void run() {
+			Thread.currentThread().interrupt();
+			long lockr = lock.readLock();
+			System.out.println(Thread.currentThread().getName()
+					+ " get read lock");
+			lock.unlockRead(lockr);
+		}
+	}
+}
+</pre>
+
+这个例子说的是对中断的不作为。作者JaonHui给出了修复，见这里：
+https://github.com/zuai/Hui/blob/master/StampedLock.java
