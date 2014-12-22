@@ -20,6 +20,7 @@ ABA问题是一种异常现象：如果在算法中的节点可以被循环使�
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
 
 我们来看一下StampedLock的官方例子，
+
 <pre class="prettyPrint">
 import java.util.concurrent.locks.StampedLock;
 //
@@ -79,5 +80,24 @@ public class Point {
 		point.moveIfAtOrigin(10, 20);
 		point.distanceFromOrigin();
 	}
+}
+</pre>
+
+move方法中writeLock返回long，这个stamp就是版本号。
+
+distanceFromOrigin方法中tryOptimisticRead是乐观读，源码中可知，实际没有lock。
+然后validate会校验stamp是否变化。
+
+其中U.loadFence();是关键，作用是 强制读取操作和验证操作在一些情况下的内存排序问题。
+
+<pre class="prettyPrint">
+public long tryOptimisticRead() {
+	long s;
+	return (((s = state) & WBIT) == 0L) ? (s & SBITS) : 0L;
+}
+//
+public boolean validate(long stamp) {
+        U.loadFence();
+        return (stamp & SBITS) == (state & SBITS);
 }
 </pre>
