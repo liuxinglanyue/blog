@@ -95,18 +95,6 @@ class EntityTest implements Serializable {
 
 ![hello](/img/kryo-first.png) 
 
-如图所示：红色部分：未注册的类
-
-蓝色部分：类名，其中最后一位xF4是被加上了x80的，so xF4=x80+x74,查询ASCII表，x74代表t
-
-绿色部分：x2E代表23
-
-黄色部分：x34代表4，xB5也是被加上x80了，xB5=x80+x35，查表，x35代表5
-
-除了圈圈中的，还有两个x01，是IdentityObjectIntMap中存储的id
-
-下面贴出序列化int、String的代码，一看便知。
-
 
 
 
