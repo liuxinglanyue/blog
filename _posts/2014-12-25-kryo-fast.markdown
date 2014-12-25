@@ -145,14 +145,6 @@ public int writeVarInt (int value, boolean optimizePositive) throws KryoExceptio
     return 5;
 }
 
-
-
-
-
-
-
-
-
 public void writeString (String value) throws KryoException {
     if (value == null) {
         writeByte(0x80); // 0 means null, bit 8 means UTF8.
