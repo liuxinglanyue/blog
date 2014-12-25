@@ -4,3 +4,104 @@ category: "java"
 title:  "序列化利器kryo"
 tags: [java,kryo,serialize]
 ---
+
+这几天在做一个缓存工具，其中一个目标是支持AOP，
+
+于是有下面这样一段代码：
+
+<pre class="prettyPrint">
+public class MethodCacheInterceptor implements MethodInterceptor {
+
+    @Override
+    public Object invoke(MethodInvocation invocation) throws Throwable {
+        Object value = CacheManager.getInstance().get(invocation.getArguments());
+        if(null == value) {
+            value = invocation.proceed();
+            CacheManager.getInstance().put(invocation.getArguments(), value);
+        }
+        return value;
+    }
+
+}
+</pre>
+
+CacheManager是单例模式，方法的参数作为Key，方法的返回值作为Value。
+
+所以，必须对Object以及Object[]进行序列化，so，采用Hessian、Kryo、Java等，可配置。
+
+这篇文章，我们仅讨论Kryo。
+
+接下来，我们先试用下Kryo，代码如下：
+
+<pre class="prettyPrint">
+import java.io.ByteArrayOutputStream;
+import java.io.Serializable;
+import java.util.Arrays;
+//
+import org.junit.Test;
+//
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Output;
+import com.esotericsoftware.minlog.Log;
+//
+public class KryoTestByjjf {
+//
+    @Test
+    public void test() {
+        Log.TRACE();
+        Kryo kryo = new Kryo();
+        //
+        Output output = null;
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            output = new Output(baos);
+            kryo.writeClassAndObject(output, new EntityTest(23, "45"));
+            output.flush();
+            byte[] b = baos.toByteArray();
+            //
+            System.out.println(Hex.encodeHexStr(b, false)); //将byte数组转换为16进制
+            System.out.println(Arrays.toString(b));
+        } finally {
+            if (output != null)
+                output.close();
+        }
+    }
+}
+//
+class EntityTest implements Serializable {
+    //
+    private int i;
+    private String name;
+    //
+    public EntityTest() {
+    }
+    //
+    public EntityTest(int i, String name) {
+        this.i = i;
+        this.name = name;
+    }
+    //
+    public int getI() {
+        return this.i;
+    }
+    //
+    public String getName() {
+        return this.name;
+    }
+}
+</pre>
+
+16进制输出为：0100636F6D2E6A6A662E456E74697479546573F4012E0134B5
+
+![hello](/img/kryo-first.png) 
+
+如图所示：红色部分：未注册的类
+        蓝色部分：类名，其中最后一位xF4是被加上了x80的，so xF4=x80+x74,查询ASCII表，x74代表t
+        绿色部分：x2E代表23
+        黄色部分：x34代表4，xB5也是被加上x80了，xB5=x80+x35，查表，x35代表5
+        除了圈圈中的，还有两个x01，是IdentityObjectIntMap中存储的id
+
+
+
+
+
