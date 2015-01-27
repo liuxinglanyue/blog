@@ -43,11 +43,11 @@ public class PackageFromClassFast {
 			in.readUnsignedShort();// 次版本号
 			in.readUnsignedShort();// 主版本号
 			int i = in.readUnsignedShort();// 常量池长度
-			Map<Integer, Integer> classInfoMap = new HashMap<Integer, Integer>();
-			Map<Integer, String> classNameMap = new HashMap<Integer, String>();
+			Map&lt;Integer, Integer&gt; classInfoMap = new HashMap&lt;Integer, Integer&gt;();
+			Map&lt;Integer, String&gt; classNameMap = new HashMap&lt;Integer, String&gt;();
 
 			//常量池
-			for (int j = 1; j < i; ++j) {
+			for (int j = 1; j &lt; i; ++j) {
 				int k = in.readUnsignedByte();
 				switch (k) {
 				case 7:
