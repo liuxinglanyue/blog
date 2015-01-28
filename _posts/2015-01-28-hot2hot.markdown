@@ -7,3 +7,227 @@ tags: [java,class,hotcode,hotswap,reload]
 
 我们用eclipse+tomcat开发web项目时，经常会这样做，修改个java文件，然后不需要重启tomcat就可以直接看到修改后的结果， 这就是热替换技术。
 
+对热替换技术原理的探索源于hotswap，但是hotswap的限制比较多。用户手册：http://jm-blog.aliapp.com/?p=641
+
+阿里自己实现了hotcode2，功能挺强大的，而且在不断的更新。
+
+原理就是：切入java.lang.ClassLoader中的方法defineClass，通过asm将加载的类修改。比如在方法中加入代码，用于判断当前class是否修改过，如果修改过，就重新加载。
+
+下面贴一张hotswap和hotcode2的比较图：
+
+![hotcode](/img/hotcode.png)
+
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
+接下来简单说下hot2hot：
+
+git地址：https://github.com/liuxinglanyue/hot2hot
+
+首先通过javagent的方式切入， AgentMain类做了两件事儿。第一，修改java.lang.ClassLoader中的defineClass方法。第二，定时扫描一个文件夹，替换class。
+
+
+defineClass方法如下：
+
+<pre class="prettyPrint">
+protected final Class<?> defineClass(String name, byte[] b, int off, int len,
+                                         ProtectionDomain protectionDomain)
+        throws ClassFormatError
+    {
+        //hot2hot
+        if(!name.startsWith("sun.") && !name.startsWith("java.") && !name.startsWith("javax.") 
+                && !name.startsWith("org.omg.") && !name.startsWith("org.w3c.") && !name.startsWith("org.xml.")
+                && !name.startsWith("sun.")) {
+            protectionDomain = preDefineClass(name, protectionDomain);
+
+            Class c = null;
+            String source = defineClassSourceLocation(protectionDomain);
+
+            try {
+                c = defineClass1(name, b, off, len, protectionDomain, source);
+            } catch (ClassFormatError cf) {
+                c = defineTransformedClass(name, b, off, len, protectionDomain, cf,
+                                           source);
+            }
+
+            postDefineClass(c, protectionDomain);
+            Clazzs.setClazz(name, c);
+            return c;
+        }
+        //hot2hot
+        
+        protectionDomain = preDefineClass(name, protectionDomain);
+
+        Class c = null;
+        String source = defineClassSourceLocation(protectionDomain);
+
+        try {
+            c = defineClass1(name, b, off, len, protectionDomain, source);
+        } catch (ClassFormatError cfe) {
+            c = defineTransformedClass(name, b, off, len, protectionDomain, cfe,
+                                       source);
+        }
+
+        postDefineClass(c, protectionDomain);
+        return c;
+    }
+</pre>
+
+Clazzs内部就是ConcurrentHashMap，修改defineClass的目的就是将Class信息保存起来。
+
+修改defineClass方法的代码如下：
+
+<pre class="prettyPrint">
+package org.hot2hot.jdk;
+
+import java.security.ProtectionDomain;
+
+import org.hot2hot.utils.Clazzs;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.Label;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+
+/**
+ * 修改ClassLoader的defineClass
+ * @author jiaojianfeng
+ *
+ */
+public class ClassLoaderAdapter extends ClassVisitor {
+
+    public ClassLoaderAdapter(ClassVisitor cv){
+        super(Opcodes.ASM4, cv);
+    }
+
+    @Override
+    public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
+        MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);
+
+        if (name.equals("defineClass")
+            && desc.equals(Type.getMethodDescriptor(Type.getType(Class.class), Type.getType(String.class),
+                                                    Type.getType(byte[].class), Type.INT_TYPE, Type.INT_TYPE,
+                                                    Type.getType(ProtectionDomain.class)))) {
+            return new MethodVisitor(Opcodes.ASM4, mv) {
+
+                @Override
+                public void visitCode() {
+                    super.visitCode();
+                    //if 判断
+                    Label jump = new Label();
+                    Label tryLabel = new Label();
+                    
+                    mv.visitVarInsn(Opcodes.ALOAD, 1);
+                    mv.visitLdcInsn("com.sun.");
+                    mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, Type.getInternalName(String.class),
+                            "startsWith", "(Ljava/lang/String;)Z");
+                    mv.visitJumpInsn(Opcodes.IFNE, jump);
+                    
+                    mv.visitVarInsn(Opcodes.ALOAD, 1);
+                    mv.visitLdcInsn("java.");
+                    mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, Type.getInternalName(String.class),
+                            "startsWith", "(Ljava/lang/String;)Z");
+                    mv.visitJumpInsn(Opcodes.IFNE, jump);
+                    
+                    mv.visitVarInsn(Opcodes.ALOAD, 1);
+                    mv.visitLdcInsn("javax.");
+                    mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, Type.getInternalName(String.class),
+                            "startsWith", "(Ljava/lang/String;)Z");
+                    mv.visitJumpInsn(Opcodes.IFNE, jump);
+                    
+                    mv.visitVarInsn(Opcodes.ALOAD, 1);
+                    mv.visitLdcInsn("org.omg.");
+                    mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, Type.getInternalName(String.class),
+                            "startsWith", "(Ljava/lang/String;)Z");
+                    mv.visitJumpInsn(Opcodes.IFNE, jump);
+                    
+                    mv.visitVarInsn(Opcodes.ALOAD, 1);
+                    mv.visitLdcInsn("org.w3c.");
+                    mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, Type.getInternalName(String.class),
+                            "startsWith", "(Ljava/lang/String;)Z");
+                    mv.visitJumpInsn(Opcodes.IFNE, jump);
+                    
+                    mv.visitVarInsn(Opcodes.ALOAD, 1);
+                    mv.visitLdcInsn("org.xml.");
+                    mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, Type.getInternalName(String.class),
+                            "startsWith", "(Ljava/lang/String;)Z");
+                    mv.visitJumpInsn(Opcodes.IFNE, jump);
+                    
+                    mv.visitVarInsn(Opcodes.ALOAD, 1);
+                    mv.visitLdcInsn("sun.");
+                    mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, Type.getInternalName(String.class),
+                            "startsWith", "(Ljava/lang/String;)Z");
+                    mv.visitJumpInsn(Opcodes.IFNE, jump);
+                    
+                    //if
+                    
+                    mv.visitVarInsn(Opcodes.ALOAD, 0);
+                    mv.visitVarInsn(Opcodes.ALOAD, 1);
+                    mv.visitVarInsn(Opcodes.ALOAD, 5);
+                    mv.visitMethodInsn(Opcodes.INVOKESPECIAL, Type.getInternalName(ClassLoader.class),
+                            "preDefineClass", "(Ljava/lang/String;Ljava/security/ProtectionDomain;)Ljava/security/ProtectionDomain;");
+                    mv.visitVarInsn(Opcodes.ASTORE, 5);
+                    mv.visitInsn(Opcodes.ACONST_NULL);
+                    
+                    mv.visitVarInsn(Opcodes.ASTORE, 6);
+                    mv.visitVarInsn(Opcodes.ALOAD, 0);
+                    mv.visitVarInsn(Opcodes.ALOAD, 5);
+                    mv.visitMethodInsn(Opcodes.INVOKESPECIAL, Type.getInternalName(ClassLoader.class),
+                            "defineClassSourceLocation", "(Ljava/security/ProtectionDomain;)Ljava/lang/String;");
+                    
+                    mv.visitVarInsn(Opcodes.ASTORE, 7);
+                    mv.visitVarInsn(Opcodes.ALOAD, 0);
+                    mv.visitVarInsn(Opcodes.ALOAD, 1);
+                    mv.visitVarInsn(Opcodes.ALOAD, 2);
+                    mv.visitVarInsn(Opcodes.ILOAD, 3);
+                    mv.visitVarInsn(Opcodes.ILOAD, 4);
+                    mv.visitVarInsn(Opcodes.ALOAD, 5);
+                    mv.visitVarInsn(Opcodes.ALOAD, 7);
+                    mv.visitMethodInsn(Opcodes.INVOKESPECIAL, Type.getInternalName(ClassLoader.class),
+                            "defineClass1", "(Ljava/lang/String;[BIILjava/security/ProtectionDomain;Ljava/lang/String;)Ljava/lang/Class;");
+                    mv.visitVarInsn(Opcodes.ASTORE, 6);
+                    mv.visitJumpInsn(Opcodes.GOTO, tryLabel);
+                    mv.visitVarInsn(Opcodes.ASTORE, 8);
+                    
+                    mv.visitVarInsn(Opcodes.ALOAD, 0);
+                    mv.visitVarInsn(Opcodes.ALOAD, 1);
+                    mv.visitVarInsn(Opcodes.ALOAD, 2);
+                    mv.visitVarInsn(Opcodes.ILOAD, 3);
+                    mv.visitVarInsn(Opcodes.ILOAD, 4);
+                    mv.visitVarInsn(Opcodes.ALOAD, 5);
+                    mv.visitVarInsn(Opcodes.ALOAD, 8);
+                    mv.visitVarInsn(Opcodes.ALOAD, 7);
+                    mv.visitMethodInsn(Opcodes.INVOKESPECIAL, Type.getInternalName(ClassLoader.class),
+                            "defineTransformedClass", "(Ljava/lang/String;[BIILjava/security/ProtectionDomain;Ljava/lang/ClassFormatError;Ljava/lang/String;)Ljava/lang/Class;");
+                    mv.visitVarInsn(Opcodes.ASTORE, 6);
+                    mv.visitLabel(tryLabel);
+                    
+                    mv.visitVarInsn(Opcodes.ALOAD, 0);
+                    mv.visitVarInsn(Opcodes.ALOAD, 6);
+                    mv.visitVarInsn(Opcodes.ALOAD, 5);
+                    mv.visitMethodInsn(Opcodes.INVOKESPECIAL, Type.getInternalName(ClassLoader.class),
+                            "postDefineClass", "(Ljava/lang/Class;Ljava/security/ProtectionDomain;)V");
+
+                    
+                    mv.visitVarInsn(Opcodes.ALOAD, 1);
+                    mv.visitVarInsn(Opcodes.ALOAD, 6);
+                    mv.visitMethodInsn(Opcodes.INVOKESTATIC, Type.getInternalName(Clazzs.class),
+                            "setClazz", "(Ljava/lang/String;Ljava/lang/Class;)V");
+                    
+                    mv.visitVarInsn(Opcodes.ALOAD, 6);
+                    mv.visitInsn(Opcodes.ARETURN);
+                    
+                    mv.visitLabel(jump);
+                }
+
+            };
+        }
+
+        return mv;
+    }
+}
+
+</pre>
+
+第二点的定时扫描文件，没什么难点。其中，根据class文件获取包名，前文已经分析过。具体参看github
+
+说明下：hot2hot没有经过线上测试，使用请谨慎。
