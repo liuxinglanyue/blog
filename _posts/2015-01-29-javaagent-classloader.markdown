@@ -15,9 +15,9 @@ tags: [java,class,javaagent,classloader]
 
 查看官方文档：http://docs.oracle.com/javase/7/docs/api/java/lang/instrument/package-summary.html
 
-=======================================================================
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
 The agent class will be loaded by the system class loader (see ClassLoader.getSystemClassLoader). This is the class loader which typically loads the class containing the application main method. The premain methods will be run under the same security and classloader rules as the application main method. There are no modeling restrictions on what the agent premain method may do. Anything application main can do, including creating threads, is legal from premain.
-=======================================================================
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
 
 Oh! My God ，系统类加载的。
 
