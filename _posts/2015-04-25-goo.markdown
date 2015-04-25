@@ -23,6 +23,6 @@ tags: [java,go,c,javagoo,python]
 
 确定使用Go开发后，我花了一天时间完成了第一版的开发。[analyze_portal](https://github.com/liuxinglanyue/analyze_portal) ，有些粗陋。上图
 
-![isp](https://github.com/liuxinglanyue/analyze_portal/blob/master/pic/isp.png)
+![isp](/img/isp.png)
 
-![time](https://github.com/liuxinglanyue/analyze_portal/blob/master/pic/time.png)
+![time](/img/time.png)
