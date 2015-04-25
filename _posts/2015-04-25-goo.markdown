@@ -1,0 +1,28 @@
+---
+layout: post
+category: "go"
+title:  "初识Go"
+tags: [java,go,c,javagoo,python]
+---
+
+个把月没有写blog了，说没有时间，总有些牵强。主要还是没有特别深入的话题。
+
+从大学毕业，用Java做项目也有三年了。感慨下，汗滴滴！！！！
+
+在大学里，大一大二主要用C做些算法相关的题目，没有过深的研究。尤其是Unix相关的api啥的。大三大四主要就是Java了（加入实验室也做了些小项目）。不过C在我心中一直是那么的高高在上，也想用来开发开发小工具啥的。在朋友的推荐的下，买了本《[UNIX环境高级编程](http://book.douban.com/subject/25900403/)》慢慢研究。
+
+![unix](/img/unix.jpg)
+
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-扯淡分割线\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
+以前也知道Go的存在，没有太多在意。有次想申请个Java相关的域名，试了很多，javago被使用了。最终选择了javagoo，今天忽然想起来，总觉得和Go有点缘分，必须写篇blog记录下。
+
+上个星期，项目需要做个分析数据并展示的小工具。想了想，没必要用Java吧。于是开始挑选轻量些的语言。一开始想到了Python（[我的第一个blog](http://liuxinglanyue.appspot.com/)【可恶的墙】使用的就是Python，在Micolog上简单修改修改，部署在GAE上的），还记得学习python语法是在2011年过年的时候。但是现在让我写Python，还做不到熟练。然后简单实现了个查询数据库的代码。
+
+熟悉Docker的都知道，其是用Go写的。所以不多说。这里顺便推荐下[jvm.go](https://github.com/zxh0/jvm.go)，对jvm，go有兴趣的，可以看看源码哦。今天看微博知道，阿里CDN团队也有用Go做些工具相关的开发。
+
+确定使用Go开发后，我花了一天时间完成了第一版的开发。[analyze_portal](https://github.com/liuxinglanyue/analyze_portal) ，有些粗陋。上图
+
+![isp](https://github.com/liuxinglanyue/analyze_portal/blob/master/pic/isp.png)
+
+![time](https://github.com/liuxinglanyue/analyze_portal/blob/master/pic/time.png)
