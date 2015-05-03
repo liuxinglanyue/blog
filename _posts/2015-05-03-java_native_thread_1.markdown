@@ -25,7 +25,7 @@ g++ -std=c++0x -I/home/jjf/hadoop/jdk1.6.0_45/include/linux/ -I/home/jjf/hadoop/
 g++ -shared -o "libcpu.so" ./SetCpu.o
 </pre>
 
-其中/home/jjf/hadoop/jdk1.6.0_45是JDK按照目录
+其中/home/jjf/hadoop/jdk1.6.0_45是JDK安装目录
 
 然后将生成的libcpu.so移到$java.library.path目录下
 
