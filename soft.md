@@ -34,13 +34,19 @@ title: "开源：open source"
 
 	基于Tomcat7，支持多种session持久化方案
 
-5. ####基于预测模型的缓存(未开动)
+5. ####将java线程绑定到具体的cpu上执行
+	
+	[threadBandCpu](https://github.com/liuxinglanyue/threadBandCpu)
+	
+	通过JNI调用，使用pthread实现cpu的绑定
+
+6. ####基于预测模型的缓存(未开动)
 	
 	[PreCache](https://github.com/liuxinglanyue/PreCache)
 
 	目的就是提前缓存用户查询的数据
 
-6. ####爬取阿里巴巴国际站上商家信息(给老婆用的小工具)
+7. ####爬取阿里巴巴国际站上商家信息(给老婆用的小工具)
 	
 	[Carry](https://github.com/liuxinglanyue/Carry)
 
