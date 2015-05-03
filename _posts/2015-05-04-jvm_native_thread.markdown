@@ -5,6 +5,17 @@ title:  "深入JVM内部了解Java线程的创建与执行"
 tags: [java,jvm,thread,native]
 ---
 
+首先科普下linux线程知识，linux下有两种线程，用户层的用户线程，内核层的内核线程
+
+用户线程的调度是以进程为单位的，每个线程分配的执行时间就很少
+
+内核线程是操作系统支持的，操作系统内核负责创建、调度和管理
+
+对pthread来说，
+Linux内核2.6之前是用户线程，2.6开始改为NPTL。
+
+NPTL是一个1*1的线程库，就是说，当你使用pthread_create()调用创建一个线程后，在内核里就相应创建了一个调度实体，在linux里就是一个新进程，这个方法最大可能的简化了线程的实现。（参考[介绍NPTL](http://blog.csdn.net/guosha/article/details/2960186)）
+
 执行Thread时，会调用start()方法
 
 <pre class="prettyPrint">
