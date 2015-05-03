@@ -210,7 +210,7 @@ src/os/windows/vm/os_windows.cpp
 
 这里我们只看下linux的实现，代码有些长
 
-int ret = pthread\_create(&tid, &attr, (void* (*)(void*)) java_start, thread);
+int ret = pthread\_create(&tid, &attr, (void* (\*)(void*)) java_start, thread);
 
 玩linux的都知道pthread.h，不多说
 
