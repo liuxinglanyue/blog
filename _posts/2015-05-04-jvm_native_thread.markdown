@@ -6,6 +6,7 @@ tags: [java,jvm,thread,native]
 ---
 
 执行Thread时，会调用start()方法
+
 <pre class="prettyPrint">
 public synchronized void start() {
     if (threadStatus != 0)
