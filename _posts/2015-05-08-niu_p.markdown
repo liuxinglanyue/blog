@@ -1,0 +1,8 @@
+---
+layout: post
+category: "water"
+title:  "我给牛人的新定义"
+tags: [water,p,niu]
+---
+
+牛人从A公司离职去了B公司，为了让牛人再回到A公司，然后A公司收购了B公司，牛人又回到了A公司。
