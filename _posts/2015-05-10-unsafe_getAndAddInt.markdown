@@ -141,9 +141,11 @@ public final int getAndAddInt(java.lang.Object, long, int);
 
 仔细寻找，发现最大的差别就是unsafe的调用，getAndAddInt调用unsafe是通过aload_0。而自己写的方法呢，由于unsafe限制，只能通过反射获取，故程序中调用unsafe是通过getstatic
 
-但是在接下来的测试发现，aload_0与getstatic并不会导致上面三倍的差距（实际测下来可以说不相伯仲）
+但是在接下来的测试发现，aload_0与getstatic并不会导致上面三倍的差距（单线程下，实际测下来可以说不相伯仲）
 
 #####3、 这时候我就疑惑了，难道是JVM对unsafe做了多线程优化
 
-#####4、 再次分析参考文章中的代码(暂无结论)
+#####4、 再次分析参考文章中的代码
+
+#####5、 我能给出的结论是，多线程情况下，aload_0是从栈（线程私有）中获取unsafe引用，getstatic是从方法区（线程公有）中获取unsafe引用，so.....【正确性有待考证】
 
