@@ -39,14 +39,20 @@ title: "开源：open source"
 	[threadBandCpu](https://github.com/liuxinglanyue/threadBandCpu)
 	
 	通过JNI调用，使用pthread实现cpu的绑定
+	
+6. ####SSH免密码自动登录(fork后添加功能)
 
-6. ####基于预测模型的缓存(未开动)
+	[ssh-auto-login-manage](https://github.com/liuxinglanyue/ssh-auto-login-manage)
+	
+	在原先的基础上加了两个功能，1.自定义端口 2.添加描述信息，帮助记忆
+
+7. ####基于预测模型的缓存(未开动)
 	
 	[PreCache](https://github.com/liuxinglanyue/PreCache)
 
 	目的就是提前缓存用户查询的数据
 
-7. ####爬取阿里巴巴国际站上商家信息(给老婆用的小工具)
+8. ####爬取阿里巴巴国际站上商家信息(给老婆用的小工具)
 	
 	[Carry](https://github.com/liuxinglanyue/Carry)
 
