@@ -149,3 +149,8 @@ public final int getAndAddInt(java.lang.Object, long, int);
 
 #####5、 我能给出的结论是，多线程情况下，aload_0是从栈（线程私有）中获取unsafe引用，getstatic是从方法区（线程公有）中获取unsafe引用，so.....【正确性有待考证】
 
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-补充结论\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
+看了这篇文章后[AtomicInteger Java 7 vs Java 8](http://ashkrit.blogspot.com/2014/02/atomicinteger-java-7-vs-java-8.html) 知道了为啥性能有差距了
+
+unsafe的方法getAndAddInt，在执行时有专门的指令lock xadd。而反编译unsafe获得了getAndAddInt实现，然后自己重写一次，指令就变多了，没有直接调用快了。 so。。。。大概有3倍的性能差距。
