@@ -5,7 +5,7 @@ title:  "查看Java代码对应的汇编指令利器，hsdis"
 tags: [jvm,java,hsdis,c]
 ---
 
-上一篇文章中提到了汇编指令[unsafe中getAndAddInt性能疑问](http://javagoo.tk/java/unsafe_getAndAddInt.html) ，正式由于对汇编不甚了解，导致走了很多误区。
+上一篇文章中提到了汇编指令[unsafe中getAndAddInt性能疑问](http://javagoo.tk/java/unsafe_getAndAddInt.html) ，正是由于对汇编不甚了解，导致走了很多误区。
 
 这篇文章主要说下如何使用[hsdis](https://kenai.com/projects/base-hsdis)？
 
@@ -38,15 +38,15 @@ public class Bar {
 
 > java -XX:+UnlockDiagnosticVMOptions -XX:+PrintAssembly -Xcomp -XX:CompileCommand=dontinline,Bar.sum -XX:CompileCommand=compileonly,Bar.sum Bar
 
-参数UnlockDiagnosticVMOptions从JDK7的某个版本开始必须加上。
+1. 参数UnlockDiagnosticVMOptions从JDK7的某个版本开始必须加上。
 
-参数PrintAssembly是输出反汇编内容
+2. 参数PrintAssembly是输出反汇编内容
 
-参数-Xcomp是让虚拟机以编译模式执行代码
+3. 参数-Xcomp是让虚拟机以编译模式执行代码
 
-参数dontinline是不对Bar.sum方法做内联优化
+4. 参数dontinline是不对Bar.sum方法做内联优化
 
-参数compileonly是仅仅编译Bar.sum方法
+5. 参数compileonly是仅仅编译Bar.sum方法
 
 下面是汇编代码，这里顺便贴一下
 
