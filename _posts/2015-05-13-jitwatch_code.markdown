@@ -77,7 +77,6 @@ java -server -XX:+UnlockDiagnosticVMOptions -XX:+TraceClassLoading  -XX:+PrintAs
 
 ![jitwatch](/img/jitwatch.png)
 
-
 1. 点击Open Log选择jit.log文件
 2. 点击Start
 3. 如图，右击run()方法，点击TriView
@@ -85,9 +84,9 @@ java -server -XX:+UnlockDiagnosticVMOptions -XX:+TraceClassLoading  -XX:+PrintAs
 
 ![jitwatch-2](/img/jitwatch-2.png)
 
+AtomicInteger.getAndIncrement()方法对应的汇编指令callq。
 
-AtomicInteger.getAndIncrement()方法对应的汇编指令callq。通过JITWatch发现，getAndAddInt()已经被编译为特殊的机器指令xadd（这就是为啥jdk8比jdk7快的原因，读者可以自己看下jdk7是啥）
-
+通过JITWatch发现，getAndAddInt()已经被编译为特殊的机器指令xadd（这就是为啥jdk8比jdk7快的原因，读者可以自己看下jdk7是啥）
 
 ![jitwatch-3](/img/jitwatch-3.png)
 
