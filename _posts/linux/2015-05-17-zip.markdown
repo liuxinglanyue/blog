@@ -1,0 +1,14 @@
+---
+layout: post
+category: "linux"
+title:  "影响zip压缩速度的参数"
+tags: [linux,zip,unzip]
+---
+
+今天通过zip -r file.zip ./* 压缩一个大的文件夹（超过500Mb，且很多碎文件）。
+
+这条命令会将需要压缩的文件显示出来（原因就出在这里）。
+
+so，改为不显示指令执行过程
+
+zip -r -q file.zip ./*
