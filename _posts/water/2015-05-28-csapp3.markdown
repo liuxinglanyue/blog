@@ -1,0 +1,16 @@
+---
+layout: post
+category: "water"
+title:  "深入理解计算机系统（第三版）"
+tags: [water,csapp,3,computer,deep]
+---
+
+今天网上看到《深入理解计算机系统》（万年好书啊）出第三版了，遂google下
+
+[亚马逊购买地址](http://www.amazon.com/Computer-Systems-Programmers-Perspective-Edition/dp/013409266X)
+
+感叹下，国外的书真贵啊。
+
+这里找到了第二版和第三版的区别，看了后还是挺期待的，不多说，上图。
+
+![csapp3](/img/water/csapp3.png)
