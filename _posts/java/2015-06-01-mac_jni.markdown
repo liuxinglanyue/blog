@@ -35,7 +35,7 @@ NativeTest.h
 #ifndef NATIVETEST_H
 #define NATIVETEST_H
 
-extern "C" int __declspec()add(int x, int y);
+extern "C" int add(int x, int y);
 
 #endif
 </pre>
