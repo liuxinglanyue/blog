@@ -1,0 +1,10 @@
+---
+layout: post
+category: "water"
+title:  "祝妙妙六一儿童节快乐哦"
+tags: [water,mm,61]
+---
+
+这是我家妙妙过的第一个六一儿童节，附上美照。
+
+![mm0601](/img/mm/mm-20150601.jpeg)
