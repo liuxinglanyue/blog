@@ -1,0 +1,84 @@
+---
+layout: post
+category: "java"
+title:  "Mac上C++生成Java调用库,JNA"
+tags: [java,dylib,jnilib,mac,jna,bug]
+---
+
+通过Java调用C、C++，一般我们都是用JNI。但是熟悉C的人对jni.h不一定了解。
+
+随着时代的发展，Java对性能的要求越来越高，对底层开发的需求也越来越多。
+
+于是，我想着，是不是可以开发一个框架，对Java调用C、C++进行封装。
+
+Google下，发现竟然已经存在JNA了。好吧，来试用下。
+
+由于是Mac，生成的动态库既不是dll，也不是so了。
+
+参考一些文章说，Mac上是jnilib，但是我试了多次都没有成功。
+
+也发现了一些bug[JDK-7134690 : remove legacy jnilib support from ClassLoader and System ](http://bugs.java.com/bugdatabase/view_bug.do?bug_id=7134690)
+
+但这是已经修复的。下面的报错信息给我们提示了
+
+<pre class="prettyPrint">
+Unable to load library 'NativeTest': Native library (darwin/libNativeTest.dylib) not found in resource path 
+</pre>
+
+JNA只处理这种方式libXXX.dylib(Mac机器上)
+
+下面给个例子:
+
+NativeTest.h
+
+<pre class="prettyPrint">
+#ifndef NATIVETEST_H
+#define NATIVETEST_H
+
+extern "C" int __declspec()add(int x, int y);
+
+#endif
+</pre>
+
+NativeTest.cpp
+
+<pre class="prettyPrint">
+#include "NativeTest.h"
+int add(int x, int y) {
+        return x + y;
+}
+</pre>
+
+<pre class="prettyPrint">
+gcc -c NativeTest.cpp
+</pre>
+
+<pre class="prettyPrint">
+gcc -dynamiclib -o libNativeTest.dylib NativeTest.o
+</pre>
+
+<pre class="prettyPrint">
+import com.sun.jna.Library;
+import com.sun.jna.Native;
+ 
+public class JNATest {
+     
+    static {
+        System.load("/Users/user/Documents/empleyment/libNativeTest.dylib");
+    }
+    
+    public interface NativeTest extends Library {
+        public int add(int x, int y);
+    }
+ 
+    public static void main(String[] args) {
+         
+        NativeTest nt = (NativeTest) Native.loadLibrary("NativeTest", NativeTest.class);
+        if (nt != null) {
+            int x = nt.add(10, 36);
+            System.out.println(x);
+        }
+         
+    }
+}
+</pre>
