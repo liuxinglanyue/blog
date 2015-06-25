@@ -1,0 +1,13 @@
+---
+layout: post
+category: "water"
+title:  "我的技术书籍"
+tags: [water,book,computer,tech]
+---
+
+昨晚换凉席了，有很多书放在床上，需要收拾下。
+
+上图：
+
+![book](/img/water/book.png)
+
