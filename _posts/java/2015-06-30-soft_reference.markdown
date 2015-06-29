@@ -36,7 +36,7 @@ void ReferenceProcessor::init_statics() {
 
 此处将clock设置为当前时间。
 
-此文件中有个函数process_discovered_references
+此文件中有个函数process\_discovered\_references
 
 <pre class="prettyPrint">
 ReferenceProcessorStats ReferenceProcessor::process_discovered_references(
@@ -127,7 +127,7 @@ ReferenceProcessorStats ReferenceProcessor::process_discovered_references(
 </pre>
 
 
-然后一步一步的执行到了 policy->should_clear_reference
+然后一步一步的执行到了 policy->should\_clear\_reference
 
 Java提供了几种SoftReference策略
 
@@ -213,9 +213,9 @@ bool LRUMaxHeapPolicy::should_clear_reference(oop p,
 
 总结下：
 
-存活时间大于\_max_interval就回收
+存活时间大于\_max\_interval就回收
 
-就是3，4策略对于\_max_interval的计算方式不同
+就是3，4策略对于\_max\_interval的计算方式不同
 
 这里涉及到一个配置项 -XX:SoftRefLRUPolicyMSPerMB=1000
 
