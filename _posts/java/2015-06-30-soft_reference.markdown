@@ -7,7 +7,7 @@ tags: [java,SoftReference,c++,c]
 
 看过SoftReference类的java源码，是不是会疑惑clock的值是怎么来的？
 
-找找C++源码。。。。。。
+找找C++源码。。。。。。(jdk版本: jdk9-b66)
 
 hotspot/src/share/vm/memory/referenceProcessor.cpp
 
