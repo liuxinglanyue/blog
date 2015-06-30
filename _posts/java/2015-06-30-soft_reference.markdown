@@ -131,7 +131,7 @@ ReferenceProcessorStats ReferenceProcessor::process_discovered_references(
 
 Java提供了几种SoftReference策略
 
-1. NeverClearPolicy
+1. NeverClearPolicy (没被使用)
 2. AlwaysClearPolicy
 3. LRUCurrentHeapPolicy
 4. LRUMaxHeapPolicy
