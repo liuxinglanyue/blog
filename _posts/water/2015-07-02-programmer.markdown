@@ -7,10 +7,10 @@ tags: [water,programmer,computer,tech]
 
 如何做一个要深度有深度，要广度有广度的。。。。。。
 
-Programmer
+1. Programmer
 
-Architect
+2. Architect
 
-Technical experts
+3. Technical experts
 
-CTO
+4. CTO
