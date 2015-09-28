@@ -27,7 +27,7 @@ org.springframework.aop.framework.DefaultAopProxyFactory
 		}
 	}
 </pre>
-这段代码的意思很明确，除非targetClass是接口，否则使用jdk自带的代理类。
+这段代码的意思很明确，如果targetClass是接口，就使用jdk自带的代理类。
 
 不优先使用cglib是有原因的，cglib创建proxy比较慢。
 
