@@ -5,7 +5,7 @@ title:  "查看Java代码对应的汇编指令利器，hsdis"
 tags: [jvm,java,hsdis,c]
 ---
 
-上一篇文章中提到了汇编指令[unsafe中getAndAddInt性能疑问](http://javagoo.tk/java/unsafe_getAndAddInt.html) ，正是由于对汇编不甚了解，导致走了很多误区。
+上一篇文章中提到了汇编指令[unsafe中getAndAddInt性能疑问](http://javagoo.com/java/unsafe_getAndAddInt.html) ，正是由于对汇编不甚了解，导致走了很多误区。
 
 这篇文章主要说下如何使用[hsdis](https://kenai.com/projects/base-hsdis)？
 

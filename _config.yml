@@ -13,7 +13,7 @@ paginate_path: "page:num"
 # presonal config
 title: Liuxinglanyue's Blog
 description: Liuxinglanyue's Blog, powered by Jekyll...
-feed: http://javagoo.tk/atom.xml
+feed: http://javagoo.com/atom.xml
 
 author: liuxinglanyue
 

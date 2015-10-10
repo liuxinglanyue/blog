@@ -5,7 +5,7 @@ title:  "从GuardedBy说起的jsr305"
 tags: [thread,threadSafe,guardedBy,jsr305]
 ---
 
-这件事儿得从commons-pool说起，在看pool源码的过程中看到LinkedBlockingDeque。http://javagoo.tk/java/commons-pool.html
+这件事儿得从commons-pool说起，在看pool源码的过程中看到LinkedBlockingDeque。http://javagoo.com/java/commons-pool.html
 
 其中有三个成员变量被标注为GuardedBy("lock")， 好奇找了下，看是哪个jar中的。
 

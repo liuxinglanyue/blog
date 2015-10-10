@@ -5,7 +5,7 @@ title:  "Java线程绑定到具体的cpu上执行"
 tags: [java,jvm,jni,thread,native]
 ---
 
-上文[通过JNI调用线程执行](http://javagoo.tk/java/java_native_thread_1.html)已经实现了通过JNI调用Java线程执行。
+上文[通过JNI调用线程执行](http://javagoo.com/java/java_native_thread_1.html)已经实现了通过JNI调用Java线程执行。
 
 本文就是说明如何设置线程执行的cpu？
 

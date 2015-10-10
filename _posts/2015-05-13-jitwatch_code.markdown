@@ -5,7 +5,7 @@ title:  "查看Java代码对应的汇编指令又一利器，JITWatch"
 tags: [jvm,java,hsdis,c,jitwatch,jit]
 ---
 
-接着上一篇文章[查看Java代码对应的汇编指令利器，hsdis](http://javagoo.tk/java/hsdis_code.html)。JITWatch提供了更好的显示方式，还有各种图表，称得上又一利器。
+接着上一篇文章[查看Java代码对应的汇编指令利器，hsdis](http://javagoo.com/java/hsdis_code.html)。JITWatch提供了更好的显示方式，还有各种图表，称得上又一利器。
 
 github地址：[JITWatch](https://github.com/AdoptOpenJDK/jitwatch)
 
