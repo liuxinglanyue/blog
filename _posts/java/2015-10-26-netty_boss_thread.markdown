@@ -5,7 +5,7 @@ title:  "Netty boss线程 Accept"
 tags: [java,netty,thread]
 ---
 
-我们知道Netty可以这样创建boss、work的EventLoopGroup
+我们知道Netty可以这样创建boss、work的EventLoopGroup，如果nThreads有多个呢，如何处理分配accept的呢？
 
 <pre class="prettyPrint">
 EventLoopGroup bossGroup = new NioEventLoopGroup(1);
