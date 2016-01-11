@@ -1,0 +1,111 @@
+---
+layout: post
+category: "linux"
+title:  "OSX系统下的gettid(2)"
+tags: [linux,osx,gettid,go]
+---
+
+接着上一篇文章: [OSX系统下的gettid](http://javagoo.com/linux/gettid.html)
+
+由于jstack可以获取到线程的id，故我们可以查看jstack的源代码，看JDK是如何实现的。
+
+os_bsd.cpp
+
+```
+// Information of current thread in variety of formats
+pid_t os::Bsd::gettid() {
+  int retval = -1;
+
+#ifdef __APPLE__ //XNU kernel
+  // despite the fact mach port is actually not a thread id use it
+  // instead of syscall(SYS_thread_selfid) as it certainly fits to u4
+  retval = ::pthread_mach_thread_np(::pthread_self());
+  guarantee(retval != 0, "just checking");
+  return retval;
+
+#elif __FreeBSD__
+  retval = syscall(SYS_thr_self);
+#elif __OpenBSD__
+  retval = syscall(SYS_getthrid);
+#elif __NetBSD__
+  retval = (pid_t) syscall(SYS__lwp_self);
+#endif
+
+  if (retval == -1) {
+    return getpid();
+  }
+}
+```
+
+这里说的很清楚，OSX并不是调用的syscall(SYS_thread_selfid)，上一篇文章中也试着调用了，但是结果和jstack不一样。
+
+有了上面的代码，我们在OSX系统下获取线程id就变得非常简单了。
+
+NativeThreadId.h
+
+```
+#ifndef NativeThreadId_H
+#define NativeThreadId_H
+
+extern "C" int getThreadId();
+
+#endif
+```
+
+NativeThreadId.cpp
+
+```
+#include "NativeThreadId.h"
+#include <pthread.h>
+
+/**
+ *  gcc -c NativeThreadId.cpp
+ *  gcc -dynamiclib -o libNativeTest.dylib NativeTest.o
+ */
+int getThreadId() {
+	return pthread_mach_thread_np(pthread_self());
+}
+```
+
+至于Java调用，我们可以用JNA，非常方便。
+
+```
+import com.sun.jna.Library;
+import com.sun.jna.Native;
+import com.sun.jna.Platform;
+
+public class Threads {
+  static {
+    if (Platform.isMac()) {
+      System.load("libNativeThreadId.dylib");
+    }
+  }
+
+  private interface CLibrary extends Library {
+    int syscall(int api);
+  }
+
+  private interface MLibrary extends Library {
+    int getThreadId();
+  }
+
+  private static final int __NR_gettid = Platform.is64Bit() ? 186 : 224;
+
+  private static final Library INSTANCE = (Library) Native.loadLibrary(Platform.isMac() ? "NativeThreadId"
+          : (Platform.isWindows() ? "msvcrt" : "c"), Platform.isMac() ? MLibrary.class : CLibrary.class);
+
+
+  public static int getThreadId() {
+    System.out.println(INSTANCE);
+    if (Platform.isMac()) {
+      return ((MLibrary)INSTANCE).getThreadId();
+    } else {
+      return ((CLibrary)INSTANCE).syscall(__NR_gettid);
+    }
+  }
+
+}
+
+```
+
+执行并与jstack比较，正确。
