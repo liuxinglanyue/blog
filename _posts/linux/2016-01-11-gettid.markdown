@@ -137,3 +137,5 @@ int main(int argc, const char * argv[]) {
  * syscall(SYS_gettid)=-1
  */
 ```
+
+验证，SYS_thread_selfid并非线程id
