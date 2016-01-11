@@ -1,0 +1,139 @@
+---
+layout: post
+category: "linux"
+title:  "OSX系统下的gettid"
+tags: [linux,osx,gettid,go]
+---
+
+问题的由来是这样的，有个开源项目jcgroup（Cgroup on JVM），其中有一些功能需要获取当前线程的id。jcgroup通过native的方式获取，但是在Mac下行不通。
+
+Windows，Linux下可以通过JNA jar获取gettid
+
+<pre class="prettyPrint">
+import com.sun.jna.Library;
+import com.sun.jna.Native;
+import com.sun.jna.Platform;
+
+public class Threads {
+
+  private interface CLibrary extends Library {
+    CLibrary INSTANCE = (CLibrary) Native.loadLibrary(Platform.isWindows() ? "msvcrt" : "c", CLibrary.class);
+
+    int syscall(int api);
+  }
+
+  private static final int __NR_gettid = Platform.isMac() ? 286 : (Platform.is64Bit() ? 186 : 224);
+
+  public static int getThreadId() {
+    return CLibrary.INSTANCE.syscall(__NR_gettid);
+  }
+
+}
+</pre>
+
+Mac系统执行结果是 -1
+
+Mac系统有什么办法可以获取线程id呢？
+
+这时想到了Golang，查看api
+
+<pre class="prettyPrint">
+func Gettid() (tid int)
+</pre>
+
+但是不幸的是，Golang在Mac下没有提供这个函数（作罢）
+
+Google下：
+
+MacOS: use SYS_thread_selfid for thread id
+
+SYS_gettid is instead some kind of effective uid.  SYS_thread_selfid was
+added in 10.6, so we simply do not support 10.5 or earlier.
+
+[Unified Diff: core/unix/os.c](https://codereview.appspot.com/50120043/patch/1/10001)
+
+```
+Index: core/unix/os.c
+diff --git a/core/unix/os.c b/core/unix/os.c
+index 4d94fff09ea5dcbfc038baf44ef8f4dd63043623..48d6e7208f755bcf96106cec2406f3e43728b67e 100644
+--- a/core/unix/os.c
++++ b/core/unix/os.c
+@@ -1,5 +1,5 @@
+ /* *******************************************************************************
+- * Copyright (c) 2010-2013 Google, Inc.  All rights reserved.
++ * Copyright (c) 2010-2014 Google, Inc.  All rights reserved.
+  * Copyright (c) 2011 Massachusetts Institute of Technology  All rights reserved.
+  * Copyright (c) 2000-2010 VMware, Inc.  All rights reserved.
+  * *******************************************************************************/
+@@ -687,10 +687,24 @@ os_init(void)
+      * or whether getpid suffices.  even 2.4 kernels have gettid
+      * (maps to getpid), don't have an old enough target to test this.
+      */
++#ifdef MACOS
++    kernel_thread_groups = (dynamorio_syscall(SYS_thread_selfid, 0) >= 0);
++#else
+     kernel_thread_groups = (dynamorio_syscall(SYS_gettid, 0) >= 0);
++#endif
+     LOG(GLOBAL, LOG_TOP|LOG_STATS, 1, "thread id is from %s\n",
+         kernel_thread_groups ? "gettid" : "getpid");
++#ifdef MACOS
++    /* SYS_thread_selfid was added in 10.6.  We have no simple way to get the
++     * thread id on 10.5, so we don't support it.
++     */
++    if (!kernel_thread_groups) {
++        SYSLOG(SYSLOG_WARNING, UNSUPPORTED_OS_VERSION, 3,
++               get_application_name(), get_application_pid(), "Mac OSX 10.5 or earlier");
++    }
++#else
+     ASSERT_CURIOSITY(kernel_thread_groups);
++#endif
+ 
+     pid_cached = get_process_id();
+ 
+@@ -1898,11 +1912,14 @@ get_parent_id(void)
+ thread_id_t 
+ get_sys_thread_id(void)
+ {
+-    if (kernel_thread_groups) {
++#ifdef MACOS
++    if (kernel_thread_groups)
++        return dynamorio_syscall(SYS_thread_selfid, 0);
++#else
++    if (kernel_thread_groups)
+         return dynamorio_syscall(SYS_gettid, 0);
+-    } else {
+-        return dynamorio_syscall(SYS_getpid, 0);
+-    }
++#endif
++    return dynamorio_syscall(SYS_getpid, 0);
+ }
+ 
+ thread_id_t 
+```
+
+```
+#include <iostream>
+#include <pthread.h>
+#include <sys/syscall.h>
+
+int main(int argc, const char * argv[]) {
+    std::cout << "getpid()=" << getpid() << std::endl;
+    std::cout << "pthread_self()=" << pthread_self() << std::endl;
+    uint64_t tid;
+    pthread_threadid_np(NULL, &tid);
+    std::cout << "pthread_threadid_np()=" << tid << std::endl;
+    
+    std::cout << "syscall(SYS_thread_selfid)=" << syscall(SYS_thread_selfid) << std::endl;
+    
+    std::cout << "syscall(SYS_gettid)=" << syscall(SYS_gettid) << std::endl;
+    return 0;
+}
+
+/*
+ * getpid()=1753
+ * pthread_self()=0x100081000
+ * pthread_threadid_np()=84638
+ * syscall(SYS_thread_selfid)=84638
+ * syscall(SYS_gettid)=-1
+ */
+```
