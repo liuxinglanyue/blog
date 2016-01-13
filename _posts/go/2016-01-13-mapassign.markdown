@@ -84,6 +84,6 @@ Showing top 10 nodes out of 37 (cum >= 103MB)
 
 [pprof002.svg](http://javagoo.com/img/go/pprof002.svg)
 
-Graph同样修改下，内存消耗从1.3G降到了20M。
+Graph同样修改下，内存消耗从1.3G降到了900M。
 
 新的问题【待解】：从pprof002.svg中可以发现一个新的内存大户reflect.Value.call， 由于Judge需要定时从hbs拉取Hbs.GetStrategies、Hbs.GetExpressions信息。
